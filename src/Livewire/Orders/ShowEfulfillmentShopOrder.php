@@ -37,7 +37,7 @@ class ShowEfulfillmentShopOrder extends Component
             ]);
         }
 
-        $this->order->efulfillmentShopOrder->pushed_to_montaportal = 0;
+        $this->order->efulfillmentShopOrder->pushed = 0;
         $this->order->efulfillmentShopOrder->save();
 
         $this->emit('refreshPage');
