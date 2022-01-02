@@ -6,11 +6,17 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
+use Illuminate\Support\Facades\Mail;
 use Qubiqx\QcommerceCore\Classes\Sites;
 use Qubiqx\QcommerceCore\Models\Customsetting;
+use Qubiqx\QcommerceEcommerceCore\Events\Orders\OrderMarkedAsPaidEvent;
+use Qubiqx\QcommerceEcommerceCore\Models\Order;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Mail\TrackandTraceMail;
 use Qubiqx\QcommerceEcommerceWebwinkelkeur\Classes\Webwinkelkeur;
 
 class EfulfillmentshopSettingsPage extends Page implements HasForms
@@ -24,13 +30,20 @@ class EfulfillmentshopSettingsPage extends Page implements HasForms
 
     public function mount(): void
     {
+        //Test it
+        $order = Order::latest()->first();
+        OrderMarkedAsPaidEvent::dispatch($order);
+        dd();
+//        Mail::to($order->email)->send(new TrackandTraceMail($order));
+
         $formData = [];
         $sites = Sites::getSites();
         foreach ($sites as $site) {
-            $formData["webwinkelkeur_client_id_{$site['id']}"] = Customsetting::get('webwinkelkeur_client_id', $site['id'], 'same');
-            $formData["webwinkelkeur_auth_token_{$site['id']}"] = Customsetting::get('webwinkelkeur_auth_token', $site['id'], 'order');
-            $formData["webwinkelkeur_connected_{$site['id']}"] = Customsetting::get('webwinkelkeur_connected', $site['id'], 0);
-            $formData["webwinkelkeur_connection_error_{$site['id']}"] = Customsetting::get('webwinkelkeur_connection_error', $site['id'], '');
+            $formData["efulfillment_shop_connected_{$site['id']}"] = Customsetting::get('efulfillment_shop_connected', $site['id'], 0) ? true : false;
+            $formData["efulfillment_shop_sandbox_{$site['id']}"] = Customsetting::get('efulfillment_shop_sandbox', $site['id'], 0) ? true : false;
+            $formData["efulfillment_shop_username_{$site['id']}"] = Customsetting::get('efulfillment_shop_username', $site['id']);
+            $formData["efulfillment_shop_password_{$site['id']}"] = Customsetting::get('efulfillment_shop_password', $site['id']);
+            $formData["efulfillment_shop_channel_id_{$site['id']}"] = Customsetting::get('efulfillment_shop_channel_id', $site['id']);
         }
 
         $this->form->fill($formData);
@@ -45,26 +58,37 @@ class EfulfillmentshopSettingsPage extends Page implements HasForms
         foreach ($sites as $site) {
             $schema = [
                 Placeholder::make('label')
-                    ->label("Webwinkelkeur voor {$site['name']}")
-                    ->content('Activeer webwinkelkeur zodat de klanten automatisch een mail krijgen om een review achter te laten.')
+                    ->label("E-fulfillment shop voor {$site['name']}")
+                    ->content('Activeer E-fulfillmentshop om de bestellingen te versturen.')
                     ->columnSpan([
                         'default' => 1,
                         'lg' => 2,
                     ]),
                 Placeholder::make('label')
-                    ->label("Webwinkelkeur is " . (! Customsetting::get('webwinkelkeur_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
-                    ->content(Customsetting::get('webwinkelkeur_connection_error', $site['id'], ''))
+                    ->label("E-fulfillment shop is " . (! Customsetting::get('efulfillment_shop_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
+                    ->content(Customsetting::get('efulfillment_connection_error', $site['id'], ''))
                     ->columnSpan([
                         'default' => 1,
                         'lg' => 2,
                     ]),
-                TextInput::make("webwinkelkeur_client_id_{$site['id']}")
-                    ->label('Webwinkelkeur Client ID')
+                TextInput::make("efulfillment_shop_username_{$site['id']}")
+                    ->label('Gebruikersnaam')
                     ->rules([
                         'max:255',
                     ]),
-                TextInput::make("webwinkelkeur_auth_token_{$site['id']}")
-                    ->label('Webwinkelkeur Auth Token')
+                TextInput::make("efulfillment_shop_password_{$site['id']}")
+                    ->label('Wachtwoord')
+                    ->type('password')
+                    ->rules([
+                        'max:255',
+                    ]),
+                TextInput::make("efulfillment_shop_channel_id_{$site['id']}")
+                    ->label('Channel ID')
+                    ->rules([
+                        'max:255',
+                    ]),
+                Toggle::make("efulfillment_shop_sandbox_{$site['id']}")
+                    ->label('Sandbox mode')
                     ->rules([
                         'max:255',
                     ]),
@@ -89,13 +113,15 @@ class EfulfillmentshopSettingsPage extends Page implements HasForms
         $sites = Sites::getSites();
 
         foreach ($sites as $site) {
-            Customsetting::set('webwinkelkeur_client_id', $this->form->getState()["webwinkelkeur_client_id_{$site['id']}"], $site['id']);
-            Customsetting::set('webwinkelkeur_auth_token', $this->form->getState()["webwinkelkeur_auth_token_{$site['id']}"], $site['id']);
-            Customsetting::set('webwinkelkeur_connected', Webwinkelkeur::isConnected($site['id']), $site['id']);
+            Customsetting::set('efulfillment_shop_sandbox', $this->form->getState()["efulfillment_shop_sandbox_{$site['id']}"], $site['id']);
+            Customsetting::set('efulfillment_shop_username', $this->form->getState()["efulfillment_shop_username_{$site['id']}"], $site['id']);
+            Customsetting::set('efulfillment_shop_password', $this->form->getState()["efulfillment_shop_password_{$site['id']}"], $site['id']);
+            Customsetting::set('efulfillment_shop_channel_id', $this->form->getState()["efulfillment_shop_channel_id_{$site['id']}"], $site['id']);
+            Customsetting::set('efulfillment_shop_connected', EfulfillmentShop::isConnected($site['id']), $site['id']);
         }
 
         $this->notify('success', 'De Webwinkelkeur instellingen zijn opgeslagen');
 
-        return redirect(WebwinkelkeurSettingsPage::getUrl());
+        return redirect(EfulfillmentshopSettingsPage::getUrl());
     }
 }

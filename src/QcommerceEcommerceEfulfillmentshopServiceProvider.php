@@ -12,6 +12,8 @@ class QcommerceEcommerceEfulfillmentshopServiceProvider extends PluginServicePro
 
     public function configurePackage(Package $package): void
     {
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
         cms()->builder(
             'settingPages',
             array_merge(cms()->builder('settingPages'), [
@@ -25,7 +27,8 @@ class QcommerceEcommerceEfulfillmentshopServiceProvider extends PluginServicePro
         );
 
         $package
-            ->name('qcommerce-ecommerce-efulfillmentshop');
+            ->name('qcommerce-ecommerce-efulfillmentshop')
+            ->hasViews();
     }
 
     protected function getPages(): array
