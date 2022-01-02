@@ -17,7 +17,6 @@ use Qubiqx\QcommerceEcommerceCore\Events\Orders\OrderMarkedAsPaidEvent;
 use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Mail\TrackandTraceMail;
-use Qubiqx\QcommerceEcommerceWebwinkelkeur\Classes\Webwinkelkeur;
 
 class EfulfillmentshopSettingsPage extends Page implements HasForms
 {

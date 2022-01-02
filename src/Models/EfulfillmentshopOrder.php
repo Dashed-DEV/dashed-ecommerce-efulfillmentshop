@@ -30,7 +30,7 @@ class EfulfillmentshopOrder extends Model
     ];
 
     protected $casts = [
-      'track_and_trace' => 'array'
+      'track_and_trace' => 'array',
     ];
 
     public function order()

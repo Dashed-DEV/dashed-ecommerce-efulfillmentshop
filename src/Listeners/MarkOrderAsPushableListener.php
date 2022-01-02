@@ -5,7 +5,6 @@ namespace Qubiqx\QcommerceEcommerceEfulfillmentshop\Listeners;
 use Qubiqx\QcommerceEcommerceCore\Events\Orders\OrderMarkedAsPaidEvent;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
-use Qubiqx\QcommerceEcommerceWebwinkelkeur\Classes\Webwinkelkeur;
 
 class MarkOrderAsPushableListener
 {

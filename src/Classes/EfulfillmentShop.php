@@ -27,7 +27,7 @@ class EfulfillmentShop
 
     public static function getLoginToken($siteId = null, $refresh = false)
     {
-        if (!$siteId) {
+        if (! $siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -47,7 +47,7 @@ class EfulfillmentShop
 
         $token = Customsetting::get('efulfillment_shop_token', $siteId);
 
-        if (!$token && $email && $password) {
+        if (! $token && $email && $password) {
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/ld+json',
@@ -65,12 +65,13 @@ class EfulfillmentShop
         }
 
         $token = Customsetting::get('efulfillment_shop_token', $siteId);
+
         return $token;
     }
 
     public static function isConnected($siteId = null)
     {
-        if (!$siteId) {
+        if (! $siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -118,7 +119,7 @@ class EfulfillmentShop
                     }
                 }
 
-                if (!$product->efulfillment_shop_id) {
+                if (! $product->efulfillment_shop_id) {
                     $product->efulfillment_shop_id = null;
                     $product->efulfillment_shop_error = $response['detail'];
                     $product->save();
@@ -134,7 +135,7 @@ class EfulfillmentShop
 
             $hasProductWithoutFulfillmentId = false;
             foreach ($order->orderProductsWithProduct as $orderProduct) {
-                if (!$orderProduct->product->efulfillment_shop_id) {
+                if (! $orderProduct->product->efulfillment_shop_id) {
                     $hasProductWithoutFulfillmentId = true;
                 }
             }
@@ -142,6 +143,7 @@ class EfulfillmentShop
             if ($hasProductWithoutFulfillmentId) {
                 $order->efulfillment_shop_error = 'Niet alle producten staan in Efulfillment shop';
                 $order->save();
+
                 return;
             }
 
@@ -255,6 +257,7 @@ class EfulfillmentShop
                     $trackAndTraces = json_encode($trackAndTraces);
                     if ($order->efulfillment_shop_track_and_trace != $trackAndTraces) {
                         $order->efulfillment_shop_track_and_trace = $trackAndTraces;
+
                         try {
                             Mail::to($order->email)->send(new TrackandTraceMail($order));
 
@@ -305,6 +308,7 @@ class EfulfillmentShop
                 ->get(self::getApiUrl() . '/products');
 
             $response = json_decode($response->body(), true);
+
             return $response;
         }
     }
