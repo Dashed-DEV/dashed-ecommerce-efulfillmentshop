@@ -7,16 +7,17 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Qubiqx\QcommerceCore\Models\Customsetting;
 use Qubiqx\QcommerceCore\Models\Translation;
-use Qubiqx\QcommerceEcommerceCore\Models\Order;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
 
 class TrackandTraceMail extends Mailable
 {
     use Queueable;
     use SerializesModels;
 
-    public function __construct(Order $order)
+    public function __construct(EfulfillmentshopOrder $efulfillmentOrder)
     {
-        $this->order = $order;
+        $this->efulfillmentOrder = $efulfillmentOrder;
+        $this->order = $efulfillmentOrder->order;
     }
 
     public function build()
@@ -25,6 +26,7 @@ class TrackandTraceMail extends Mailable
             'orderId' => $this->order->invoice_id,
         ]))->with([
             'order' => $this->order,
+            'efulfillmentOrder' => $this->efulfillmentOrder,
         ]);
     }
 }

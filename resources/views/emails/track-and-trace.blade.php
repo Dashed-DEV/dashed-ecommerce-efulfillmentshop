@@ -353,8 +353,8 @@
                                                                     <br>
                                                                     {!! Translation::get('order-efulfillmentshop-track-and-trace-email-content', 'efulfillmentshop', 'Your order has been picked. The following track and trace code(s) are available.', 'editor') !!}
                                                                     <hr>
-                                                                    @if($order->efulfillment_shop_track_and_trace)
-                                                                        @foreach($order->efulfillment_shop_track_and_trace as $key => $trackAndTrace)
+                                                                    @if($efulfillmentOrder->track_and_trace)
+                                                                        @foreach($efulfillmentOrder->track_and_trace as $key => $trackAndTrace)
                                                                             <p>{{$trackAndTrace}}: {{$key}}</p>
                                                                         @endforeach
                                                                     @endif

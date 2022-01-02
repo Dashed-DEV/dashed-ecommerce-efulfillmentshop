@@ -17,6 +17,7 @@ use Qubiqx\QcommerceEcommerceCore\Events\Orders\OrderMarkedAsPaidEvent;
 use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Mail\TrackandTraceMail;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
 
 class EfulfillmentshopSettingsPage extends Page implements HasForms
 {
@@ -29,12 +30,6 @@ class EfulfillmentshopSettingsPage extends Page implements HasForms
 
     public function mount(): void
     {
-        //Test it
-        $order = Order::latest()->first();
-        OrderMarkedAsPaidEvent::dispatch($order);
-        dd();
-//        Mail::to($order->email)->send(new TrackandTraceMail($order));
-
         $formData = [];
         $sites = Sites::getSites();
         foreach ($sites as $site) {

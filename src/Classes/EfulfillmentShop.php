@@ -12,6 +12,8 @@ use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Qubiqx\QcommerceEcommerceCore\Models\OrderLog;
 use Qubiqx\QcommerceEcommerceCore\Models\Product;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Mail\TrackandTraceMail;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
 
 class EfulfillmentShop
 {
@@ -27,7 +29,7 @@ class EfulfillmentShop
 
     public static function getLoginToken($siteId = null, $refresh = false)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -47,7 +49,7 @@ class EfulfillmentShop
 
         $token = Customsetting::get('efulfillment_shop_token', $siteId);
 
-        if (! $token && $email && $password) {
+        if (!$token && $email && $password) {
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/ld+json',
@@ -71,7 +73,7 @@ class EfulfillmentShop
 
     public static function isConnected($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -90,59 +92,71 @@ class EfulfillmentShop
 
     public static function pushProduct(Product $product)
     {
-        if (self::isConnected()) {
-            $token = self::getLoginToken();
+        if (!self::isConnected()) {
+            return;
+        }
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/ld+json',
-            ])->withToken($token)
-                ->post(self::getApiUrl() . '/products', [
-                    'name' => $product->name,
-                    'barcode' => $product->ean,
-                    'channelId' => (int)Customsetting::get('efulfillment_shop_channel_id'),
-                    'channelReference' => $product->name,
-                ]);
+        $efulfillmentshopProduct = EfulfillmentshopProduct::where('product_id', $product->id)->first();
+        if (!$efulfillmentshopProduct) {
+            $efulfillmentshopProduct = new EfulfillmentshopProduct();
+            $efulfillmentshopProduct->save();
+        }
 
-            $response = json_decode($response->body(), true);
-            if (isset($response['id'])) {
-                $product->efulfillment_shop_id = $response['id'];
-                $product->efulfillment_shop_error = null;
+        if ($efulfillmentshopProduct->pushed) {
+            return;
+        }
+
+        $token = self::getLoginToken();
+
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/ld+json',
+        ])->withToken($token)
+            ->post(self::getApiUrl() . '/products', [
+                'name' => $product->name,
+                'barcode' => $product->ean,
+                'channelId' => (int)Customsetting::get('efulfillment_shop_channel_id'),
+                'channelReference' => $product->name,
+            ]);
+
+        $response = json_decode($response->body(), true);
+        if (isset($response['id'])) {
+            $efulfillmentshopProduct->efulfillment_shop_id = $response['id'];
+            $efulfillmentshopProduct->error = null;
+            $efulfillmentshopProduct->save();
+        } else {
+            $allProducts = self::getProducts();
+            foreach ($allProducts as $allProduct) {
+                if ($allProduct['barcode'] == $product->ean) {
+                    $efulfillmentshopProduct->efulfillment_shop_id = $allProduct['id'];
+                    $efulfillmentshopProduct->error = null;
+                    $efulfillmentshopProduct->save();
+                }
+            }
+
+            if (!$product->efulfillment_shop_id) {
+                $product->efulfillment_shop_id = null;
+                $product->error = $response['detail'];
                 $product->save();
-            } else {
-                $allProducts = self::getProducts();
-                foreach ($allProducts as $allProduct) {
-                    if ($allProduct['barcode'] == $product->ean) {
-                        $product->efulfillment_shop_id = $allProduct['id'];
-                        $product->efulfillment_shop_error = null;
-                        $product->save();
-                    }
-                }
-
-                if (! $product->efulfillment_shop_id) {
-                    $product->efulfillment_shop_id = null;
-                    $product->efulfillment_shop_error = $response['detail'];
-                    $product->save();
-                }
             }
         }
     }
 
-    public static function pushOrder(Order $order)
+    public static function pushOrder(EfulfillmentshopOrder $efulfillmentOrder)
     {
-        if (self::isConnected($order->site_id)) {
+        if (self::isConnected($efulfillmentOrder->order->site_id)) {
             $token = self::getLoginToken();
 
             $hasProductWithoutFulfillmentId = false;
-            foreach ($order->orderProductsWithProduct as $orderProduct) {
-                if (! $orderProduct->product->efulfillment_shop_id) {
+            foreach ($efulfillmentOrder->order->orderProductsWithProduct as $orderProduct) {
+                if (!$orderProduct->product->efulfillmentShopProduct || !$orderProduct->product->efulfillmentShopProduct->efulfillment_shop_id) {
                     $hasProductWithoutFulfillmentId = true;
                 }
             }
 
             if ($hasProductWithoutFulfillmentId) {
-                $order->efulfillment_shop_error = 'Niet alle producten staan in Efulfillment shop';
-                $order->save();
+                $efulfillmentOrder->error = 'Niet alle producten staan in Efulfillment shop';
+                $efulfillmentOrder->save();
 
                 return;
             }
@@ -152,21 +166,21 @@ class EfulfillmentShop
                 'Content-Type' => 'application/ld+json',
             ])->withToken($token)
                 ->post(self::getApiUrl() . '/addresses', [
-                    'name' => $order->name,
-                    'company' => $order->company_name ?: '',
-                    'street' => $order->street,
-                    'houseNumber' => $order->house_nr,
-                    'zip' => $order->zip_code,
-                    'city' => $order->city,
-                    'countryCode' => $order->countryIsoCode,
-                    'email' => $order->email,
-                    'phone' => $order->phone_number ?: '',
+                    'name' => $efulfillmentOrder->order->name,
+                    'company' => $efulfillmentOrder->order->company_name ?: '',
+                    'street' => $efulfillmentOrder->order->street,
+                    'houseNumber' => $efulfillmentOrder->order->house_nr,
+                    'zip' => $efulfillmentOrder->order->zip_code,
+                    'city' => $efulfillmentOrder->order->city,
+                    'countryCode' => $efulfillmentOrder->order->countryIsoCode,
+                    'email' => $efulfillmentOrder->order->email,
+                    'phone' => $efulfillmentOrder->order->phone_number ?: '',
                 ]);
 
             $response = json_decode($response->body(), true);
 
-            $order->efulfillment_shop_invoice_address_id = $response['id'];
-            $order->efulfillment_shop_shipping_address_id = $response['id'];
+            $efulfillmentOrder->invoice_address_id = $response['id'];
+            $efulfillmentOrder->shipping_address_id = $response['id'];
 
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
@@ -174,24 +188,24 @@ class EfulfillmentShop
             ])->withToken($token)
                 ->post(self::getApiUrl() . '/sales', [
                     'channelId' => (int)Customsetting::get('efulfillment_shop_channel_id'),
-                    'channelReference' => $order->invoice_id,
-                    'invoiceAddressId' => $order->efulfillment_shop_invoice_address_id,
-                    'shippingAddressId' => $order->efulfillment_shop_shipping_address_id,
+                    'channelReference' => $efulfillmentOrder->order->invoice_id,
+                    'invoiceAddressId' => $efulfillmentOrder->invoice_address_id,
+                    'shippingAddressId' => $efulfillmentOrder->shipping_address_id,
                 ]);
 
             $response = json_decode($response->body(), true);
-            $order->efulfillment_shop_sale_id = $response['id'];
+            $efulfillmentOrder->sale_id = $response['id'];
 
-            foreach ($order->orderProductsWithProduct as $orderProduct) {
+            foreach ($efulfillmentOrder->order->orderProductsWithProduct as $orderProduct) {
                 $response = Http::withHeaders([
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/ld+json',
                 ])->withToken($token)
                     ->post(self::getApiUrl() . '/sale_lines', [
-                        'description' => $orderProduct->product->name,
+                        'description' => $orderProduct->name,
                         'quantity' => (int)$orderProduct->quantity,
-                        'productId' => (int)$orderProduct->product->efulfillment_shop_id,
-                        'saleId' => (int)$order->efulfillment_shop_sale_id,
+                        'productId' => (int)$orderProduct->product->efulfillmentShopProduct->efulfillment_shop_id,
+                        'saleId' => (int)$efulfillmentOrder->sale_id,
                     ]);
             }
 
@@ -199,20 +213,20 @@ class EfulfillmentShop
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/ld+json',
             ])->withToken($token)
-                ->post(self::getApiUrl() . '/sales/' . $order->efulfillment_shop_sale_id . '/confirm');
+                ->post(self::getApiUrl() . '/sales/' . $efulfillmentOrder->sale_id . '/confirm');
 
-            $order->pushed_to_efulfillment_shop = 1;
-            $order->save();
+            $efulfillmentOrder->pushed = 1;
+            $efulfillmentOrder->save();
 
             $orderLog = new OrderLog();
-            $orderLog->order_id = $order->id;
+            $orderLog->order_id = $efulfillmentOrder->order->id;
             $orderLog->user_id = Auth::user()->id ?? null;
             $orderLog->tag = 'order.pushed-to-efulfillmentshop';
             $orderLog->save();
         }
     }
 
-    public static function updateSale(Order $order)
+    public static function updateSale(EfulfillmentshopOrder $efulfillmentOrder)
     {
         if (self::isConnected()) {
             $token = self::getLoginToken();
@@ -220,17 +234,17 @@ class EfulfillmentShop
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/ld+json',
             ])->withToken($token)
-                ->get(self::getApiUrl() . '/sales/' . $order->efulfillment_shop_sale_id);
+                ->get(self::getApiUrl() . '/sales/' . $efulfillmentOrder->sale_id);
             $response = json_decode($response->body(), true);
 
-            $order->efulfillment_shop_fulfillment_status = $response['status'];
+            $efulfillmentOrder->fulfillment_status = $response['status'];
 
-            if ($order->efulfillment_shop_fulfillment_status == 'ship') {
-                $order->changeFulfillmentStatus('handled');
-            } elseif ($order->efulfillment_shop_fulfillment_status == 'pick') {
-                $order->changeFulfillmentStatus('in_treatment');
-            } elseif ($order->efulfillment_shop_fulfillment_status == 'pack') {
-                $order->changeFulfillmentStatus('packed');
+            if ($efulfillmentOrder->fulfillment_status == 'ship') {
+                $efulfillmentOrder->order->changeFulfillmentStatus('handled');
+            } elseif ($efulfillmentOrder->fulfillment_status == 'pick') {
+                $efulfillmentOrder->order->changeFulfillmentStatus('in_treatment');
+            } elseif ($efulfillmentOrder->fulfillment_status == 'pack') {
+                $efulfillmentOrder->order->changeFulfillmentStatus('packed');
             }
 
             if ($response['shipmentIds']) {
@@ -254,30 +268,24 @@ class EfulfillmentShop
                         $trackAndTraces[$trackingCode] = $carrierResponse['name'];
                     }
 
-                    $trackAndTraces = json_encode($trackAndTraces);
-                    if ($order->efulfillment_shop_track_and_trace != $trackAndTraces) {
-                        $order->efulfillment_shop_track_and_trace = $trackAndTraces;
+                    if ($efulfillmentOrder->track_and_trace != $trackAndTraces) {
+                        $efulfillmentOrder->track_and_trace = $trackAndTraces;
 
+                        $orderLog = new OrderLog();
+                        $orderLog->order_id = $efulfillmentOrder->order->id;
+                        $orderLog->user_id = null;
                         try {
-                            Mail::to($order->email)->send(new TrackandTraceMail($order));
-
-                            $orderLog = new OrderLog();
-                            $orderLog->order_id = $order->id;
-                            $orderLog->user_id = null;
+                            Mail::to($efulfillmentOrder->order->email)->send(new TrackandTraceMail($efulfillmentOrder));
                             $orderLog->tag = 'order.t&t.send';
-                            $orderLog->save();
                         } catch (\Exception $e) {
-                            $orderLog = new OrderLog();
-                            $orderLog->order_id = $order->id;
-                            $orderLog->user_id = null;
                             $orderLog->tag = 'order.t&t.not-send';
-                            $orderLog->save();
                         }
+                        $orderLog->save();
                     }
                 }
             }
 
-            $order->save();
+            $efulfillmentOrder->save();
         }
     }
 
