@@ -4,11 +4,16 @@ namespace Qubiqx\QcommerceEcommerceEfulfillmentshop;
 
 use Filament\PluginServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
+use Livewire\Livewire;
+use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Qubiqx\QcommerceEcommerceCore\Models\Product;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\PushOrdersToEfulfillmentShopCommand;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\PushProductsToEfulfillmentShopCommand;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\UpdateOrdersFromEfulfillmentShopCommand;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Filament\Pages\Settings\EfulfillmentshopSettingsPage;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Filament\Widgets\EfulfillmentShopOrderStats;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Livewire\Orders\ShowEfulfillmentShopOrder;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
 use Spatie\LaravelPackageTools\Package;
 
@@ -25,8 +30,13 @@ class QcommerceEcommerceEfulfillmentshopServiceProvider extends PluginServicePro
             $schedule->command(UpdateOrdersFromEfulfillmentShopCommand::class)->everyFiveMinutes();
         });
 
+        Livewire::component('show-efulfillmentshop-order', ShowEfulfillmentShopOrder::class);
+
         Product::addDynamicRelation('efulfillmentShopProduct', function (Product $model) {
             return $model->hasOne(EfulfillmentshopProduct::class);
+        });
+        Order::addDynamicRelation('efulfillmentShopOrder', function (Order $model) {
+            return $model->hasOne(EfulfillmentshopOrder::class);
         });
     }
 
@@ -46,6 +56,15 @@ class QcommerceEcommerceEfulfillmentshopServiceProvider extends PluginServicePro
             ])
         );
 
+        ecommerce()->builder(
+            'orderSideWidgets',
+            array_merge(ecommerce()->builder('orderSideWidgets'), [
+                'show-efulfillmentshop-order' => [
+                    'name' => 'show-efulfillmentshop-order',
+                ],
+            ])
+        );
+
         $package
             ->name('qcommerce-ecommerce-efulfillmentshop')
             ->hasViews()
@@ -60,6 +79,13 @@ class QcommerceEcommerceEfulfillmentshopServiceProvider extends PluginServicePro
     {
         return array_merge(parent::getPages(), [
             EfulfillmentshopSettingsPage::class,
+        ]);
+    }
+
+    protected function getWidgets(): array
+    {
+        return array_merge(parent::getWidgets(), [
+            EfulfillmentShopOrderStats::class,
         ]);
     }
 }

@@ -21,6 +21,7 @@ class EfulfillmentshopOrder extends Model
         'sale_id',
         'track_and_trace',
         'fulfillment_status',
+        'pushed',
         'error',
     ];
 
