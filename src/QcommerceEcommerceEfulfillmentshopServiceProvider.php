@@ -5,11 +5,11 @@ namespace Qubiqx\QcommerceEcommerceEfulfillmentshop;
 use Filament\PluginServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use Qubiqx\QcommerceEcommerceCore\Models\Product;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Filament\Pages\Settings\EfulfillmentshopSettingsPage;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\PushOrdersToEfulfillmentShopCommand;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\PushProductsToEfulfillmentShopCommand;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\UpdateOrdersFromEfulfillmentShopCommand;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Filament\Pages\Settings\EfulfillmentshopSettingsPage;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
 use Spatie\LaravelPackageTools\Package;
 
 class QcommerceEcommerceEfulfillmentshopServiceProvider extends PluginServiceProvider
