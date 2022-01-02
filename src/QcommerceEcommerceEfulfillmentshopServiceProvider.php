@@ -5,8 +5,6 @@ namespace Qubiqx\QcommerceEcommerceEfulfillmentshop;
 use Filament\PluginServiceProvider;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Filament\Pages\Settings\EfulfillmentshopSettingsPage;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\QcommerceEcommerceEfulfillmentshopCommand;
 
 class QcommerceEcommerceEfulfillmentshopServiceProvider extends PluginServiceProvider
 {
