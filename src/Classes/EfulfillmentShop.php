@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Qubiqx\QcommerceCore\Classes\Sites;
 use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Qubiqx\QcommerceEcommerceCore\Models\OrderLog;
 use Qubiqx\QcommerceEcommerceCore\Models\Product;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Mail\TrackandTraceMail;
@@ -29,7 +28,7 @@ class EfulfillmentShop
 
     public static function getLoginToken($siteId = null, $refresh = false)
     {
-        if (!$siteId) {
+        if (! $siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -49,7 +48,7 @@ class EfulfillmentShop
 
         $token = Customsetting::get('efulfillment_shop_token', $siteId);
 
-        if (!$token && $email && $password) {
+        if (! $token && $email && $password) {
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/ld+json',
@@ -73,7 +72,7 @@ class EfulfillmentShop
 
     public static function isConnected($siteId = null)
     {
-        if (!$siteId) {
+        if (! $siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -92,12 +91,12 @@ class EfulfillmentShop
 
     public static function pushProduct(Product $product)
     {
-        if (!self::isConnected()) {
+        if (! self::isConnected()) {
             return;
         }
 
         $efulfillmentshopProduct = EfulfillmentshopProduct::where('product_id', $product->id)->first();
-        if (!$efulfillmentshopProduct) {
+        if (! $efulfillmentshopProduct) {
             $efulfillmentshopProduct = new EfulfillmentshopProduct();
             $efulfillmentshopProduct->save();
         }
@@ -134,7 +133,7 @@ class EfulfillmentShop
                 }
             }
 
-            if (!$product->efulfillment_shop_id) {
+            if (! $product->efulfillment_shop_id) {
                 $product->efulfillment_shop_id = null;
                 $product->error = $response['detail'];
                 $product->save();
@@ -149,7 +148,7 @@ class EfulfillmentShop
 
             $hasProductWithoutFulfillmentId = false;
             foreach ($efulfillmentOrder->order->orderProductsWithProduct as $orderProduct) {
-                if (!$orderProduct->product->efulfillmentShopProduct || !$orderProduct->product->efulfillmentShopProduct->efulfillment_shop_id) {
+                if (! $orderProduct->product->efulfillmentShopProduct || ! $orderProduct->product->efulfillmentShopProduct->efulfillment_shop_id) {
                     $hasProductWithoutFulfillmentId = true;
                 }
             }
@@ -274,6 +273,7 @@ class EfulfillmentShop
                         $orderLog = new OrderLog();
                         $orderLog->order_id = $efulfillmentOrder->order->id;
                         $orderLog->user_id = null;
+
                         try {
                             Mail::to($efulfillmentOrder->order->email)->send(new TrackandTraceMail($efulfillmentOrder));
                             $orderLog->tag = 'order.t&t.send';

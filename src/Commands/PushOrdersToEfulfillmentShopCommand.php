@@ -3,7 +3,6 @@
 namespace Qubiqx\QcommerceEcommerceFulfillmentshop\Commands;
 
 use Illuminate\Console\Command;
-use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
 
