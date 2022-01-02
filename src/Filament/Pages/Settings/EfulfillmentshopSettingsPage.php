@@ -109,7 +109,7 @@ class EfulfillmentshopSettingsPage extends Page implements HasForms
             Customsetting::set('efulfillment_shop_connected', EfulfillmentShop::isConnected($site['id']), $site['id']);
         }
 
-        $this->notify('success', 'De Webwinkelkeur instellingen zijn opgeslagen');
+        $this->notify('success', 'De Efulfillment shop instellingen zijn opgeslagen');
 
         return redirect(EfulfillmentshopSettingsPage::getUrl());
     }

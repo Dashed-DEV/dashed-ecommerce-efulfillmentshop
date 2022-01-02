@@ -1,6 +1,6 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceFulfillmentshop\Commands;
+namespace Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands;
 
 use Illuminate\Console\Command;
 use Qubiqx\QcommerceEcommerceCore\Models\Product;

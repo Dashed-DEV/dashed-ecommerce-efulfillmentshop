@@ -7,9 +7,9 @@ use Illuminate\Console\Scheduling\Schedule;
 use Qubiqx\QcommerceEcommerceCore\Models\Product;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Filament\Pages\Settings\EfulfillmentshopSettingsPage;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
-use Qubiqx\QcommerceEcommerceFulfillmentshop\Commands\PushOrdersToEfulfillmentShopCommand;
-use Qubiqx\QcommerceEcommerceFulfillmentshop\Commands\PushProductsToEfulfillmentShopCommand;
-use Qubiqx\QcommerceEcommerceFulfillmentshop\Commands\UpdateOrdersFromEfulfillmentShopCommand;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\PushOrdersToEfulfillmentShopCommand;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\PushProductsToEfulfillmentShopCommand;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\UpdateOrdersFromEfulfillmentShopCommand;
 use Spatie\LaravelPackageTools\Package;
 
 class QcommerceEcommerceEfulfillmentshopServiceProvider extends PluginServiceProvider
@@ -39,7 +39,7 @@ class QcommerceEcommerceEfulfillmentshopServiceProvider extends PluginServicePro
             array_merge(cms()->builder('settingPages'), [
                 'efulfillmentshop' => [
                     'name' => 'E-fulfillment shop',
-                    'description' => 'Koppel e-fulfillment shop aan je bestelling',
+                    'description' => 'Koppel e-fulfillment shop aan je bestellingen',
                     'icon' => 'archive',
                     'page' => EfulfillmentshopSettingsPage::class,
                 ],
