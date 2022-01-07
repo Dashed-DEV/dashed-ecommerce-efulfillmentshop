@@ -61,7 +61,7 @@ class QcommerceEcommerceEfulfillmentshopServiceProvider extends PluginServicePro
             array_merge(ecommerce()->widgets('orders'), [
                 'show-efulfillmentshop-order' => [
                     'name' => 'show-efulfillmentshop-order',
-                    'width' => 'sidebar'
+                    'width' => 'sidebar',
                 ],
             ])
         );
