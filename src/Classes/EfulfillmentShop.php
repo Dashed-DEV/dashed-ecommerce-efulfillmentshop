@@ -28,7 +28,7 @@ class EfulfillmentShop
 
     public static function getLoginToken($siteId = null, $refresh = false)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -48,7 +48,7 @@ class EfulfillmentShop
 
         $token = Customsetting::get('efulfillment_shop_token', $siteId);
 
-        if (! $token && $email && $password) {
+        if (!$token && $email && $password) {
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/ld+json',
@@ -72,7 +72,7 @@ class EfulfillmentShop
 
     public static function isConnected($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -91,12 +91,12 @@ class EfulfillmentShop
 
     public static function pushProduct(Product $product)
     {
-        if (! self::isConnected()) {
+        if (!self::isConnected()) {
             return;
         }
 
         $efulfillmentshopProduct = EfulfillmentshopProduct::where('product_id', $product->id)->first();
-        if (! $efulfillmentshopProduct) {
+        if (!$efulfillmentshopProduct) {
             $efulfillmentshopProduct = new EfulfillmentshopProduct();
             $efulfillmentshopProduct->save();
         }
@@ -107,37 +107,43 @@ class EfulfillmentShop
 
         $token = self::getLoginToken();
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/ld+json',
-        ])->withToken($token)
-            ->post(self::getApiUrl() . '/products', [
-                'name' => $product->name,
-                'barcode' => $product->ean,
-                'channelId' => (int)Customsetting::get('efulfillment_shop_channel_id'),
-                'channelReference' => $product->name,
-            ]);
+        try {
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/ld+json',
+            ])->withToken($token)
+                ->post(self::getApiUrl() . '/products', [
+                    'name' => $product->name,
+                    'barcode' => $product->ean,
+                    'channelId' => (int)Customsetting::get('efulfillment_shop_channel_id'),
+                    'channelReference' => $product->name,
+                ]);
 
-        $response = json_decode($response->body(), true);
-        if (isset($response['id'])) {
-            $efulfillmentshopProduct->efulfillment_shop_id = $response['id'];
-            $efulfillmentshopProduct->error = null;
-            $efulfillmentshopProduct->save();
-        } else {
-            $allProducts = self::getProducts();
-            foreach ($allProducts as $allProduct) {
-                if ($allProduct['barcode'] == $product->ean) {
-                    $efulfillmentshopProduct->efulfillment_shop_id = $allProduct['id'];
-                    $efulfillmentshopProduct->error = null;
+            $response = json_decode($response->body(), true);
+            if (isset($response['id'])) {
+                $efulfillmentshopProduct->efulfillment_shop_id = $response['id'];
+                $efulfillmentshopProduct->error = null;
+                $efulfillmentshopProduct->save();
+            } else {
+                $allProducts = self::getProducts();
+                foreach ($allProducts as $allProduct) {
+                    if ($allProduct['barcode'] == $product->ean) {
+                        $efulfillmentshopProduct->efulfillment_shop_id = $allProduct['id'];
+                        $efulfillmentshopProduct->error = null;
+                        $efulfillmentshopProduct->save();
+                    }
+                }
+
+                if (!$efulfillmentshopProduct->efulfillment_shop_id) {
+                    $efulfillmentshopProduct->efulfillment_shop_id = null;
+                    $efulfillmentshopProduct->error = $response['detail'];
                     $efulfillmentshopProduct->save();
                 }
             }
-
-            if (! $efulfillmentshopProduct->efulfillment_shop_id) {
-                $efulfillmentshopProduct->efulfillment_shop_id = null;
-                $efulfillmentshopProduct->error = $response['detail'];
-                $efulfillmentshopProduct->save();
-            }
+        } catch (\Exception $exception) {
+            $efulfillmentshopProduct->efulfillment_shop_id = null;
+            $efulfillmentshopProduct->error = $exception->getMessage();
+            $efulfillmentshopProduct->save();
         }
     }
 
@@ -148,7 +154,7 @@ class EfulfillmentShop
 
             $hasProductWithoutFulfillmentId = false;
             foreach ($efulfillmentOrder->order->orderProductsWithProduct as $orderProduct) {
-                if (! $orderProduct->product->efulfillmentShopProduct || ! $orderProduct->product->efulfillmentShopProduct->efulfillment_shop_id) {
+                if (!$orderProduct->product->efulfillmentShopProduct || !$orderProduct->product->efulfillmentShopProduct->efulfillment_shop_id) {
                     $hasProductWithoutFulfillmentId = true;
                 }
             }
