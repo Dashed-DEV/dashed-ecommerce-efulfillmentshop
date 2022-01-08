@@ -40,6 +40,7 @@ class UpdateOrdersFromEfulfillmentShopCommand extends Command
     public function handle()
     {
         if (EfulfillmentShop::isConnected()) {
+            dump(EfulfillmentshopOrder::with(['order'])->where('pushed', 1)->where('fulfillment_status', '!=', 'ship')->count());
             foreach (EfulfillmentshopOrder::with(['order'])->where('pushed', 1)->where('fulfillment_status', '!=', 'ship')->get() as $efulfillmentOrder) {
                 EfulfillmentShop::updateSale($efulfillmentOrder);
                 dump($efulfillmentOrder->id);
