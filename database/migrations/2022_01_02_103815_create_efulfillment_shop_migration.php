@@ -32,7 +32,7 @@ class CreateEfulfillmentShopMigration extends Migration
             $table->id();
 
             $table->foreignId('product_id')->constrained('qcommerce__products');
-            $table->string('efulfillment_shop_id');
+            $table->string('efulfillment_shop_id')->nullable();
             $table->string('error')->nullable();
 
             $table->timestamps();

@@ -101,7 +101,7 @@ class EfulfillmentShop
             $efulfillmentshopProduct->save();
         }
 
-        if ($efulfillmentshopProduct->pushed) {
+        if ($efulfillmentshopProduct->efulfillment_shop_id) {
             return;
         }
 
