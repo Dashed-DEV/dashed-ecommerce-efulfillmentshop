@@ -242,11 +242,13 @@ class EfulfillmentShop
                 ->get(self::getApiUrl() . '/sales/' . $efulfillmentOrder->sale_id);
             $response = json_decode($response->body(), true);
 
-            if (!isset($response['status'])) {
-                dd($response);
+            if (isset($response['status'])) {
+                $status = $response['status'];
+            } elseif (isset($response[0]['status'])) {
+                $status = $response[0]['status'];
             }
 
-            $efulfillmentOrder->fulfillment_status = $response['status'];
+            $efulfillmentOrder->fulfillment_status = $status;
 
             if ($efulfillmentOrder->fulfillment_status == 'ship') {
                 $efulfillmentOrder->order->changeFulfillmentStatus('handled');
