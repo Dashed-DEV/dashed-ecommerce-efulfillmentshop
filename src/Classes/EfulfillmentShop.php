@@ -199,7 +199,7 @@ class EfulfillmentShop
                         'shippingAddressId' => $efulfillmentOrder->shipping_address_id,
                     ]);
             } catch (\Exception $exception) {
-                return;
+                dd($exception->getMessage());
             }
 
             $response = json_decode($response->body(), true);
