@@ -198,15 +198,17 @@ class EfulfillmentShop
                         'invoiceAddressId' => $efulfillmentOrder->invoice_address_id,
                         'shippingAddressId' => $efulfillmentOrder->shipping_address_id,
                     ]);
+                $responseId = $response['id'];
             } catch (\Exception $exception) {
-                dd($exception->getMessage());
+                $error = 'failed to do call';
+                if (isset($response['title'])) {
+                    $error = $response['title'] . ': ' . $response['detail'];
+                }
+                throw new \Exception('Efulfillment error :' . $error);
             }
 
             $response = json_decode($response->body(), true);
-            if (!isset($response['id'])) {
-                dd($response);
-            }
-            $efulfillmentOrder->sale_id = $response['id'];
+            $efulfillmentOrder->sale_id = $responseId;
 
             foreach ($efulfillmentOrder->order->orderProductsWithProduct as $orderProduct) {
                 $response = Http::withHeaders([
