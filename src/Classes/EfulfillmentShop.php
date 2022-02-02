@@ -28,7 +28,7 @@ class EfulfillmentShop
 
     public static function getLoginToken($siteId = null, $refresh = false)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -48,7 +48,7 @@ class EfulfillmentShop
 
         $token = Customsetting::get('efulfillment_shop_token', $siteId);
 
-        if (! $token && $email && $password) {
+        if (!$token && $email && $password) {
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/ld+json',
@@ -72,7 +72,7 @@ class EfulfillmentShop
 
     public static function isConnected($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -91,12 +91,12 @@ class EfulfillmentShop
 
     public static function pushProduct(Product $product)
     {
-        if (! self::isConnected()) {
+        if (!self::isConnected()) {
             return;
         }
 
         $efulfillmentshopProduct = EfulfillmentshopProduct::where('product_id', $product->id)->first();
-        if (! $efulfillmentshopProduct) {
+        if (!$efulfillmentshopProduct) {
             $efulfillmentshopProduct = new EfulfillmentshopProduct();
             $efulfillmentshopProduct->save();
         }
@@ -134,7 +134,7 @@ class EfulfillmentShop
                     }
                 }
 
-                if (! $efulfillmentshopProduct->efulfillment_shop_id) {
+                if (!$efulfillmentshopProduct->efulfillment_shop_id) {
                     $efulfillmentshopProduct->efulfillment_shop_id = null;
                     $efulfillmentshopProduct->error = $response['detail'];
                     $efulfillmentshopProduct->save();
@@ -154,7 +154,7 @@ class EfulfillmentShop
 
             $hasProductWithoutFulfillmentId = false;
             foreach ($efulfillmentOrder->order->orderProductsWithProduct as $orderProduct) {
-                if (! $orderProduct->product->efulfillmentShopProduct || ! $orderProduct->product->efulfillmentShopProduct->efulfillment_shop_id) {
+                if (!$orderProduct->product->efulfillmentShopProduct || !$orderProduct->product->efulfillmentShopProduct->efulfillment_shop_id) {
                     $hasProductWithoutFulfillmentId = true;
                 }
             }
@@ -187,16 +187,20 @@ class EfulfillmentShop
             $efulfillmentOrder->invoice_address_id = $response['id'];
             $efulfillmentOrder->shipping_address_id = $response['id'];
 
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/ld+json',
-            ])->withToken($token)
-                ->post(self::getApiUrl() . '/sales', [
-                    'channelId' => (int)Customsetting::get('efulfillment_shop_channel_id'),
-                    'channelReference' => $efulfillmentOrder->order->invoice_id,
-                    'invoiceAddressId' => $efulfillmentOrder->invoice_address_id,
-                    'shippingAddressId' => $efulfillmentOrder->shipping_address_id,
-                ]);
+            try {
+                $response = Http::withHeaders([
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/ld+json',
+                ])->withToken($token)
+                    ->post(self::getApiUrl() . '/sales', [
+                        'channelId' => (int)Customsetting::get('efulfillment_shop_channel_id'),
+                        'channelReference' => $efulfillmentOrder->order->invoice_id,
+                        'invoiceAddressId' => $efulfillmentOrder->invoice_address_id,
+                        'shippingAddressId' => $efulfillmentOrder->shipping_address_id,
+                    ]);
+            } catch (\Exception $exception) {
+                return;
+            }
 
             $response = json_decode($response->body(), true);
             $efulfillmentOrder->sale_id = $response['id'];
