@@ -258,7 +258,7 @@ class EfulfillmentShop
                 $efulfillmentOrder->order->changeFulfillmentStatus('packed');
             }
 
-            if ($response['shipmentIds']) {
+            if (isset($response['shipmentIds'])) {
                 $trackAndTraces = [];
                 foreach ($response['shipmentIds'] as $shipmentId) {
                     $shipmentResponse = Http::withHeaders([
