@@ -204,6 +204,7 @@ class EfulfillmentShop
                 if (isset($response['title'])) {
                     $error = $response['title'] . ': ' . $response['detail'];
                 }
+
                 throw new \Exception('Efulfillment error: ' . $error);
             }
 
