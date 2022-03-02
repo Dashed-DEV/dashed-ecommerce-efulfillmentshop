@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateEfulfillmentShopMigration extends Migration
 {
@@ -41,7 +41,7 @@ class CreateEfulfillmentShopMigration extends Migration
         $orders = \Qubiqx\QcommerceEcommerceCore\Models\Order::where('pushable_to_efulfillment_shop', 1)->get();
         $products = \Qubiqx\QcommerceEcommerceCore\Models\Product::whereNotNull('efulfillment_shop_id')->get();
 
-        foreach($orders as $order){
+        foreach ($orders as $order) {
             $eshopOrder = new \Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder();
             $eshopOrder->order_id = $order->id;
             $eshopOrder->invoice_address_id = $order->efulfillment_shop_invoice_address_id;
@@ -54,7 +54,7 @@ class CreateEfulfillmentShopMigration extends Migration
             $eshopOrder->save();
         }
 
-        foreach($products as $product){
+        foreach ($products as $product) {
             $eshopProduct = new \Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct();
             $eshopProduct->product_id = $product->id;
             $eshopProduct->efulfillment_shop_id = $product->efulfillment_shop_id;
