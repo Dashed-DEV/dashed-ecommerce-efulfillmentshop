@@ -2,20 +2,20 @@
 
 namespace Qubiqx\QcommerceEcommerceEfulfillmentshop;
 
-use Livewire\Livewire;
 use Filament\PluginServiceProvider;
-use Spatie\LaravelPackageTools\Package;
 use Illuminate\Console\Scheduling\Schedule;
+use Livewire\Livewire;
 use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Qubiqx\QcommerceEcommerceCore\Models\Product;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Livewire\Orders\ShowEfulfillmentShopOrder;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Filament\Widgets\EfulfillmentShopOrderStats;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\PushOrdersToEfulfillmentShopCommand;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\PushProductsToEfulfillmentShopCommand;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\UpdateOrdersFromEfulfillmentShopCommand;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Filament\Pages\Settings\EfulfillmentshopSettingsPage;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Filament\Widgets\EfulfillmentShopOrderStats;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Livewire\Orders\ShowEfulfillmentShopOrder;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
+use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
+use Spatie\LaravelPackageTools\Package;
 
 class QcommerceEcommerceEfulfillmentshopServiceProvider extends PluginServiceProvider
 {
