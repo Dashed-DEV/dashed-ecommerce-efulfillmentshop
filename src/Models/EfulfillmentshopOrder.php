@@ -2,9 +2,10 @@
 
 namespace Qubiqx\QcommerceEcommerceEfulfillmentshop\Models;
 
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
-use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Qubiqx\QcommerceEcommerceCore\Models\Order;
 
 class EfulfillmentshopOrder extends Model
 {
@@ -33,6 +34,11 @@ class EfulfillmentshopOrder extends Model
     protected $casts = [
       'track_and_trace' => 'array',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults();
+    }
 
     public function order()
     {
