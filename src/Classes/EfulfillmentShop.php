@@ -248,7 +248,10 @@ class EfulfillmentShop
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/ld+json',
-            ])->withToken($token)
+            ])
+                ->retry(3, 5)
+                ->timeout(30)
+                ->withToken($token)
                 ->get(self::getApiUrl() . '/sales/' . $efulfillmentOrder->sale_id);
             $response = json_decode($response->body(), true);
 
