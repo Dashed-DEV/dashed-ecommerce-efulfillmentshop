@@ -2,10 +2,10 @@
 
 namespace Qubiqx\QcommerceEcommerceEfulfillmentshop\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Qubiqx\QcommerceEcommerceCore\Models\Order;
 
 class EfulfillmentshopOrder extends Model
 {
