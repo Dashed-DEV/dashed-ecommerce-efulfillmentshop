@@ -40,7 +40,7 @@ class PushProductsToEfulfillmentShopCommand extends Command
     public function handle()
     {
         if (EfulfillmentShop::isConnected()) {
-            foreach (Product::publicShowable()->get() as $product) {
+            foreach (Product::publicShowable()->isNotBundle()->get() as $product) {
                 EfulfillmentShop::pushProduct($product);
             }
         }
