@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Qubiqx\QcommerceCore\Classes\Sites;
 use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
 use Qubiqx\QcommerceEcommerceCore\Models\OrderLog;
+use Qubiqx\QcommerceEcommerceCore\Models\Product;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Mail\TrackandTraceMail;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
 use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
@@ -28,7 +28,7 @@ class EfulfillmentShop
 
     public static function getLoginToken($siteId = null, $refresh = false)
     {
-        if (!$siteId) {
+        if (! $siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -48,7 +48,7 @@ class EfulfillmentShop
 
         $token = Customsetting::get('efulfillment_shop_token', $siteId);
 
-        if (!$token && $email && $password) {
+        if (! $token && $email && $password) {
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/ld+json',
@@ -72,7 +72,7 @@ class EfulfillmentShop
 
     public static function isConnected($siteId = null)
     {
-        if (!$siteId) {
+        if (! $siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -91,12 +91,12 @@ class EfulfillmentShop
 
     public static function pushProduct(Product $product)
     {
-        if (!self::isConnected()) {
+        if (! self::isConnected()) {
             return;
         }
 
         $efulfillmentshopProduct = EfulfillmentshopProduct::where('product_id', $product->id)->first();
-        if (!$efulfillmentshopProduct) {
+        if (! $efulfillmentshopProduct) {
             $efulfillmentshopProduct = new EfulfillmentshopProduct();
             $efulfillmentshopProduct->save();
         }
@@ -134,7 +134,7 @@ class EfulfillmentShop
                     }
                 }
 
-                if (!$efulfillmentshopProduct->efulfillment_shop_id) {
+                if (! $efulfillmentshopProduct->efulfillment_shop_id) {
                     $efulfillmentshopProduct->efulfillment_shop_id = null;
                     $efulfillmentshopProduct->error = $response['detail'];
                     $efulfillmentshopProduct->save();
@@ -154,8 +154,8 @@ class EfulfillmentShop
 
             $hasProductWithoutFulfillmentId = false;
             foreach ($efulfillmentOrder->order->orderProductsWithProduct as $orderProduct) {
-                if (!$orderProduct->product->is_bundle) {
-                    if (!$orderProduct->product->efulfillmentShopProduct || !$orderProduct->product->efulfillmentShopProduct->efulfillment_shop_id) {
+                if (! $orderProduct->product->is_bundle) {
+                    if (! $orderProduct->product->efulfillmentShopProduct || ! $orderProduct->product->efulfillmentShopProduct->efulfillment_shop_id) {
                         $hasProductWithoutFulfillmentId = true;
                     }
                 }
@@ -214,7 +214,7 @@ class EfulfillmentShop
             $efulfillmentOrder->sale_id = $responseId;
 
             foreach ($efulfillmentOrder->order->orderProductsWithProduct as $orderProduct) {
-                if (!$orderProduct->product->is_bundle) {
+                if (! $orderProduct->product->is_bundle) {
                     $response = Http::withHeaders([
                         'Accept' => 'application/json',
                         'Content-Type' => 'application/ld+json',
@@ -265,7 +265,7 @@ class EfulfillmentShop
                 $status = $response[0]['status'];
             }
 
-            if (!isset($status)) {
+            if (! isset($status)) {
 //                throw new \Exception('No status found for efulfillmentOrder ' . $efulfillmentOrder->id);
 
                 return;
