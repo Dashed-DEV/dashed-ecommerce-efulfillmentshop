@@ -266,7 +266,7 @@ class EfulfillmentShop
             }
 
             if (! isset($status)) {
-//                throw new \Exception('No status found for efulfillmentOrder ' . $efulfillmentOrder->id);
+                //                throw new \Exception('No status found for efulfillmentOrder ' . $efulfillmentOrder->id);
 
                 return;
             }
