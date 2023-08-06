@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `qcommerce-ecommerce-efulfillmentshop` will be documented in this file.
+All notable changes to `dashed-ecommerce-efulfillmentshop` will be documented in this file.
 
 ## 1.0.0 - 202X-XX-XX
 

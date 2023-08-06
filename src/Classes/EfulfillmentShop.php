@@ -1,18 +1,18 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceEfulfillmentshop\Classes;
+namespace Dashed\DashedEcommerceEfulfillmentshop\Classes;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
-use Qubiqx\QcommerceCore\Classes\Sites;
-use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceCore\Models\OrderLog;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Mail\TrackandTraceMail;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
+use Dashed\DashedCore\Classes\Sites;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceCore\Models\OrderLog;
+use Dashed\DashedEcommerceCore\Models\Product;
+use Dashed\DashedEcommerceEfulfillmentshop\Mail\TrackandTraceMail;
+use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
+use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
 
 class EfulfillmentShop
 {

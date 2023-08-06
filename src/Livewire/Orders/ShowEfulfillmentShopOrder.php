@@ -1,6 +1,6 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceEfulfillmentshop\Livewire\Orders;
+namespace Dashed\DashedEcommerceEfulfillmentshop\Livewire\Orders;
 
 use Livewire\Component;
 
@@ -15,7 +15,7 @@ class ShowEfulfillmentShopOrder extends Component
 
     public function render()
     {
-        return view('qcommerce-ecommerce-efulfillmentshop::orders.components.show-efulfillmentshop-order');
+        return view('dashed-ecommerce-efulfillmentshop::orders.components.show-efulfillmentshop-order');
     }
 
     public function submit()

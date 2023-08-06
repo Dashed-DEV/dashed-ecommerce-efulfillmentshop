@@ -1,10 +1,10 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands;
+namespace Dashed\DashedEcommerceEfulfillmentshop\Commands;
 
 use Illuminate\Console\Command;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
+use Dashed\DashedEcommerceCore\Models\Product;
+use Dashed\DashedEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
 
 class PushProductsToEfulfillmentShopCommand extends Command
 {

@@ -1,25 +1,25 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceEfulfillmentshop;
+namespace Dashed\DashedEcommerceEfulfillmentshop;
 
 use Filament\PluginServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use Livewire\Livewire;
-use Qubiqx\QcommerceEcommerceCore\Models\Order;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\PushOrdersToEfulfillmentShopCommand;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\PushProductsToEfulfillmentShopCommand;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands\UpdateOrdersFromEfulfillmentShopCommand;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Filament\Pages\Settings\EfulfillmentshopSettingsPage;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Filament\Widgets\EfulfillmentShopOrderStats;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Livewire\Orders\ShowEfulfillmentShopOrder;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
+use Dashed\DashedEcommerceCore\Models\Order;
+use Dashed\DashedEcommerceCore\Models\Product;
+use Dashed\DashedEcommerceEfulfillmentshop\Commands\PushOrdersToEfulfillmentShopCommand;
+use Dashed\DashedEcommerceEfulfillmentshop\Commands\PushProductsToEfulfillmentShopCommand;
+use Dashed\DashedEcommerceEfulfillmentshop\Commands\UpdateOrdersFromEfulfillmentShopCommand;
+use Dashed\DashedEcommerceEfulfillmentshop\Filament\Pages\Settings\EfulfillmentshopSettingsPage;
+use Dashed\DashedEcommerceEfulfillmentshop\Filament\Widgets\EfulfillmentShopOrderStats;
+use Dashed\DashedEcommerceEfulfillmentshop\Livewire\Orders\ShowEfulfillmentShopOrder;
+use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
+use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
 use Spatie\LaravelPackageTools\Package;
 
-class QcommerceEcommerceEfulfillmentshopServiceProvider extends PluginServiceProvider
+class DashedEcommerceEfulfillmentshopServiceProvider extends PluginServiceProvider
 {
-    public static string $name = 'qcommerce-ecommerce-efulfillmentshop';
+    public static string $name = 'dashed-ecommerce-efulfillmentshop';
 
     public function bootingPackage()
     {
@@ -67,7 +67,7 @@ class QcommerceEcommerceEfulfillmentshopServiceProvider extends PluginServicePro
         );
 
         $package
-            ->name('qcommerce-ecommerce-efulfillmentshop')
+            ->name('dashed-ecommerce-efulfillmentshop')
             ->hasViews()
             ->hasCommands([
                 PushOrdersToEfulfillmentShopCommand::class,

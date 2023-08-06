@@ -1,13 +1,13 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceEfulfillmentshop\Mail;
+namespace Dashed\DashedEcommerceEfulfillmentshop\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
-use Qubiqx\QcommerceTranslations\Models\Translation;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
+use Dashed\DashedTranslations\Models\Translation;
 
 class TrackandTraceMail extends Mailable
 {
@@ -22,7 +22,7 @@ class TrackandTraceMail extends Mailable
 
     public function build()
     {
-        return $this->view('qcommerce-ecommerce-efulfillmentshop::emails.track-and-trace')->from(Customsetting::get('site_from_email'), Customsetting::get('company_name'))->subject(Translation::get('order-efulfillmentshop-track-and-trace-email-subject', 'efulfillmentshop', 'Your order #:orderId: has been updated', 'text', [
+        return $this->view('dashed-ecommerce-efulfillmentshop::emails.track-and-trace')->from(Customsetting::get('site_from_email'), Customsetting::get('company_name'))->subject(Translation::get('order-efulfillmentshop-track-and-trace-email-subject', 'efulfillmentshop', 'Your order #:orderId: has been updated', 'text', [
             'orderId' => $this->order->invoice_id,
         ]))->with([
             'order' => $this->order,

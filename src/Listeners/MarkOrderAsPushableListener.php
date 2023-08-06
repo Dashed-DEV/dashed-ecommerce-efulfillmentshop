@@ -1,10 +1,10 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceEfulfillmentshop\Listeners;
+namespace Dashed\DashedEcommerceEfulfillmentshop\Listeners;
 
-use Qubiqx\QcommerceEcommerceCore\Events\Orders\OrderMarkedAsPaidEvent;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
+use Dashed\DashedEcommerceCore\Events\Orders\OrderMarkedAsPaidEvent;
+use Dashed\DashedEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
+use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
 
 class MarkOrderAsPushableListener
 {

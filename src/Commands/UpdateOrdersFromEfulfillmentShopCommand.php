@@ -1,10 +1,10 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceEfulfillmentshop\Commands;
+namespace Dashed\DashedEcommerceEfulfillmentshop\Commands;
 
 use Illuminate\Console\Command;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
+use Dashed\DashedEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
+use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
 
 class UpdateOrdersFromEfulfillmentShopCommand extends Command
 {

@@ -13,10 +13,10 @@ class CreateEfulfillmentShopMigration extends Migration
      */
     public function up()
     {
-        Schema::create('qcommerce__order_efulfillmentshop', function (Blueprint $table) {
+        Schema::create('dashed__order_efulfillmentshop', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('order_id')->constrained('qcommerce__orders');
+            $table->foreignId('order_id')->constrained('dashed__orders');
             $table->string('invoice_address_id')->nullable();
             $table->string('shipping_address_id')->nullable();
             $table->string('sale_id')->nullable();
@@ -28,21 +28,21 @@ class CreateEfulfillmentShopMigration extends Migration
             $table->timestamps();
         });
 
-        Schema::create('qcommerce__product_efulfillmentshop', function (Blueprint $table) {
+        Schema::create('dashed__product_efulfillmentshop', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('product_id')->constrained('qcommerce__products');
+            $table->foreignId('product_id')->constrained('dashed__products');
             $table->string('efulfillment_shop_id')->nullable();
             $table->string('error')->nullable();
 
             $table->timestamps();
         });
 
-//        $orders = \Qubiqx\QcommerceEcommerceCore\Models\Order::where('pushable_to_efulfillment_shop', 1)->get();
-//        $products = \Qubiqx\QcommerceEcommerceCore\Models\Product::whereNotNull('efulfillment_shop_id')->get();
+//        $orders = \Dashed\DashedEcommerceCore\Models\Order::where('pushable_to_efulfillment_shop', 1)->get();
+//        $products = \Dashed\DashedEcommerceCore\Models\Product::whereNotNull('efulfillment_shop_id')->get();
 
 //        foreach ($orders as $order) {
-//            $eshopOrder = new \Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder();
+//            $eshopOrder = new \Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder();
 //            $eshopOrder->order_id = $order->id;
 //            $eshopOrder->invoice_address_id = $order->efulfillment_shop_invoice_address_id;
 //            $eshopOrder->shipping_address_id = $order->efulfillment_shop_shipping_address_id;
@@ -55,14 +55,14 @@ class CreateEfulfillmentShopMigration extends Migration
 //        }
 
 //        foreach ($products as $product) {
-//            $eshopProduct = new \Qubiqx\QcommerceEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct();
+//            $eshopProduct = new \Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct();
 //            $eshopProduct->product_id = $product->id;
 //            $eshopProduct->efulfillment_shop_id = $product->efulfillment_shop_id;
 //            $eshopProduct->error = $product->efulfillment_shop_error;
 //            $eshopProduct->save();
 //        }
 
-//        Schema::table('qcommerce__orders', function (Blueprint $table) {
+//        Schema::table('dashed__orders', function (Blueprint $table) {
 //            $table->dropColumn('pushable_to_efulfillment_shop');
 //            $table->dropColumn('pushed_to_efulfillment_shop');
 //            $table->dropColumn('efulfillment_shop_error');
@@ -73,7 +73,7 @@ class CreateEfulfillmentShopMigration extends Migration
 //            $table->dropColumn('efulfillment_shop_fulfillment_status');
 //        });
 //
-//        Schema::table('qcommerce__products', function (Blueprint $table) {
+//        Schema::table('dashed__products', function (Blueprint $table) {
 //            $table->dropColumn('efulfillment_shop_id');
 //            $table->dropColumn('efulfillment_shop_error');
 //        });

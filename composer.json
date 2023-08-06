@@ -1,17 +1,17 @@
 {
-    "name": "qubiqx/qcommerce-ecommerce-efulfillmentshop",
-    "description": "This is my package qcommerce-ecommerce-efulfillmentshop",
+    "name": "dashed/dashed-ecommerce-efulfillmentshop",
+    "description": "This is my package dashed-ecommerce-efulfillmentshop",
     "keywords": [
-        "Qubiqx",
+        "Dashed",
         "laravel",
-        "qcommerce-ecommerce-efulfillmentshop"
+        "dashed-ecommerce-efulfillmentshop"
     ],
-    "homepage": "https://github.com/qubiqx/qcommerce-ecommerce-efulfillmentshop",
+    "homepage": "https://github.com/Dashed-DEV/dashed-ecommerce-efulfillmentshop",
     "license": "MIT",
     "authors": [
         {
             "name": "Robin van Maasakker",
-            "email": "robin@qubiqx.com",
+            "email": "robin@dashed.nl",
             "role": "Developer"
         }
     ],
@@ -29,13 +29,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Qubiqx\\QcommerceEcommerceEfulfillmentshop\\": "src",
-            "Qubiqx\\QcommerceEcommerceEfulfillmentshop\\Database\\Factories\\": "database/factories"
+            "Dashed\\DashedEcommerceEfulfillmentshop\\": "src",
+            "Dashed\\DashedEcommerceEfulfillmentshop\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Qubiqx\\QcommerceEcommerceEfulfillmentshop\\Tests\\": "tests"
+            "Dashed\\DashedEcommerceEfulfillmentshop\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -52,11 +52,11 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Qubiqx\\QcommerceEcommerceEfulfillmentshop\\QcommerceEcommerceEfulfillmentshopServiceProvider",
-                "Qubiqx\\QcommerceEcommerceEfulfillmentshop\\QcommerceEcommerceEfulfillmentshopEventServiceProvider"
+                "Dashed\\DashedEcommerceEfulfillmentshop\\DashedEcommerceEfulfillmentshopServiceProvider",
+                "Dashed\\DashedEcommerceEfulfillmentshop\\DashedEcommerceEfulfillmentshopEventServiceProvider"
             ],
             "aliases": {
-                "QcommerceEcommerceEfulfillmentshop": "Qubiqx\\QcommerceEcommerceEfulfillmentshop\\Facades\\QcommerceEcommerceEfulfillmentshop"
+                "DashedEcommerceEfulfillmentshop": "Dashed\\DashedEcommerceEfulfillmentshop\\Facades\\DashedEcommerceEfulfillmentshop"
             }
         }
     },

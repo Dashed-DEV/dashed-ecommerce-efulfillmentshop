@@ -1,9 +1,9 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceEfulfillmentshop\Models;
+namespace Dashed\DashedEcommerceEfulfillmentshop\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
+use Dashed\DashedEcommerceCore\Models\Product;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -13,7 +13,7 @@ class EfulfillmentshopProduct extends Model
 
     protected static $logFillable = true;
 
-    protected $table = 'qcommerce__product_efulfillmentshop';
+    protected $table = 'dashed__product_efulfillmentshop';
 
     protected $fillable = [
         'product_id',

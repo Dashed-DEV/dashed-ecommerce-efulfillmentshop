@@ -1,6 +1,6 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceEfulfillmentshop\Filament\Pages\Settings;
+namespace Dashed\DashedEcommerceEfulfillmentshop\Filament\Pages\Settings;
 
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Tabs;
@@ -10,9 +10,9 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
-use Qubiqx\QcommerceCore\Classes\Sites;
-use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
+use Dashed\DashedCore\Classes\Sites;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
 
 class EfulfillmentshopSettingsPage extends Page implements HasForms
 {
@@ -21,7 +21,7 @@ class EfulfillmentshopSettingsPage extends Page implements HasForms
     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $title = 'E-fulfillment shop';
 
-    protected static string $view = 'qcommerce-core::settings.pages.default-settings';
+    protected static string $view = 'dashed-core::settings.pages.default-settings';
 
     public function mount(): void
     {
