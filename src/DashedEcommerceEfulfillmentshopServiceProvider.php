@@ -2,9 +2,6 @@
 
 namespace Dashed\DashedEcommerceEfulfillmentshop;
 
-use Filament\PluginServiceProvider;
-use Illuminate\Console\Scheduling\Schedule;
-use Livewire\Livewire;
 use Dashed\DashedEcommerceCore\Models\Order;
 use Dashed\DashedEcommerceCore\Models\Product;
 use Dashed\DashedEcommerceEfulfillmentshop\Commands\PushOrdersToEfulfillmentShopCommand;
@@ -15,6 +12,9 @@ use Dashed\DashedEcommerceEfulfillmentshop\Filament\Widgets\EfulfillmentShopOrde
 use Dashed\DashedEcommerceEfulfillmentshop\Livewire\Orders\ShowEfulfillmentShopOrder;
 use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
 use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
+use Filament\PluginServiceProvider;
+use Illuminate\Console\Scheduling\Schedule;
+use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 
 class DashedEcommerceEfulfillmentshopServiceProvider extends PluginServiceProvider

@@ -2,9 +2,9 @@
 
 namespace Dashed\DashedEcommerceEfulfillmentshop;
 
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Dashed\DashedEcommerceCore\Events\Orders\OrderMarkedAsPaidEvent;
 use Dashed\DashedEcommerceEfulfillmentshop\Listeners\MarkOrderAsPushableListener;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class DashedEcommerceEfulfillmentshopEventServiceProvider extends ServiceProvider
 {
