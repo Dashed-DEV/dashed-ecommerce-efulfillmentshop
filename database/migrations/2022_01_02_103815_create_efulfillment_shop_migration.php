@@ -38,45 +38,45 @@ class CreateEfulfillmentShopMigration extends Migration
             $table->timestamps();
         });
 
-//        $orders = \Dashed\DashedEcommerceCore\Models\Order::where('pushable_to_efulfillment_shop', 1)->get();
-//        $products = \Dashed\DashedEcommerceCore\Models\Product::whereNotNull('efulfillment_shop_id')->get();
+        //        $orders = \Dashed\DashedEcommerceCore\Models\Order::where('pushable_to_efulfillment_shop', 1)->get();
+        //        $products = \Dashed\DashedEcommerceCore\Models\Product::whereNotNull('efulfillment_shop_id')->get();
 
-//        foreach ($orders as $order) {
-//            $eshopOrder = new \Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder();
-//            $eshopOrder->order_id = $order->id;
-//            $eshopOrder->invoice_address_id = $order->efulfillment_shop_invoice_address_id;
-//            $eshopOrder->shipping_address_id = $order->efulfillment_shop_shipping_address_id;
-//            $eshopOrder->sale_id = $order->efulfillment_shop_sale_id;
-//            $eshopOrder->track_and_trace = $order->efulfillment_shop_track_and_trace;
-//            $eshopOrder->fulfillment_status = $order->efulfillment_shop_fulfillment_status;
-//            $eshopOrder->error = $order->efulfillment_shop_error;
-//            $eshopOrder->pushed = $order->pushed_to_efulfillment_shop;
-//            $eshopOrder->save();
-//        }
+        //        foreach ($orders as $order) {
+        //            $eshopOrder = new \Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder();
+        //            $eshopOrder->order_id = $order->id;
+        //            $eshopOrder->invoice_address_id = $order->efulfillment_shop_invoice_address_id;
+        //            $eshopOrder->shipping_address_id = $order->efulfillment_shop_shipping_address_id;
+        //            $eshopOrder->sale_id = $order->efulfillment_shop_sale_id;
+        //            $eshopOrder->track_and_trace = $order->efulfillment_shop_track_and_trace;
+        //            $eshopOrder->fulfillment_status = $order->efulfillment_shop_fulfillment_status;
+        //            $eshopOrder->error = $order->efulfillment_shop_error;
+        //            $eshopOrder->pushed = $order->pushed_to_efulfillment_shop;
+        //            $eshopOrder->save();
+        //        }
 
-//        foreach ($products as $product) {
-//            $eshopProduct = new \Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct();
-//            $eshopProduct->product_id = $product->id;
-//            $eshopProduct->efulfillment_shop_id = $product->efulfillment_shop_id;
-//            $eshopProduct->error = $product->efulfillment_shop_error;
-//            $eshopProduct->save();
-//        }
+        //        foreach ($products as $product) {
+        //            $eshopProduct = new \Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct();
+        //            $eshopProduct->product_id = $product->id;
+        //            $eshopProduct->efulfillment_shop_id = $product->efulfillment_shop_id;
+        //            $eshopProduct->error = $product->efulfillment_shop_error;
+        //            $eshopProduct->save();
+        //        }
 
-//        Schema::table('dashed__orders', function (Blueprint $table) {
-//            $table->dropColumn('pushable_to_efulfillment_shop');
-//            $table->dropColumn('pushed_to_efulfillment_shop');
-//            $table->dropColumn('efulfillment_shop_error');
-//            $table->dropColumn('efulfillment_shop_invoice_address_id');
-//            $table->dropColumn('efulfillment_shop_shipping_address_id');
-//            $table->dropColumn('efulfillment_shop_sale_id');
-//            $table->dropColumn('efulfillment_shop_track_and_trace');
-//            $table->dropColumn('efulfillment_shop_fulfillment_status');
-//        });
-//
-//        Schema::table('dashed__products', function (Blueprint $table) {
-//            $table->dropColumn('efulfillment_shop_id');
-//            $table->dropColumn('efulfillment_shop_error');
-//        });
+        //        Schema::table('dashed__orders', function (Blueprint $table) {
+        //            $table->dropColumn('pushable_to_efulfillment_shop');
+        //            $table->dropColumn('pushed_to_efulfillment_shop');
+        //            $table->dropColumn('efulfillment_shop_error');
+        //            $table->dropColumn('efulfillment_shop_invoice_address_id');
+        //            $table->dropColumn('efulfillment_shop_shipping_address_id');
+        //            $table->dropColumn('efulfillment_shop_sale_id');
+        //            $table->dropColumn('efulfillment_shop_track_and_trace');
+        //            $table->dropColumn('efulfillment_shop_fulfillment_status');
+        //        });
+        //
+        //        Schema::table('dashed__products', function (Blueprint $table) {
+        //            $table->dropColumn('efulfillment_shop_id');
+        //            $table->dropColumn('efulfillment_shop_error');
+        //        });
     }
 
     /**

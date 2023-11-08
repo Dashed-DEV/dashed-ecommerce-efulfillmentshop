@@ -21,17 +21,17 @@ class ShowEfulfillmentShopOrder extends Component
     public function submit()
     {
         if (! $this->order->efulfillmentShopOrder) {
-            $this->emit('notify', [
+            $this->dispatch('notify', [
                 'status' => 'error',
                 'message' => 'De bestelling mag niet naar E-fulfillment shop gepushed worden.',
             ]);
         } elseif ($this->order->efulfillmentShopOrder->pushed == 1) {
-            $this->emit('notify', [
+            $this->dispatch('notify', [
                 'status' => 'error',
                 'message' => 'De bestelling is al naar E-fulfillment shop gepushed.',
             ]);
         } elseif ($this->order->efulfillmentShopOrder->pushed == 0) {
-            $this->emit('notify', [
+            $this->dispatch('notify', [
                 'status' => 'error',
                 'message' => 'De bestelling wordt al naar E-fulfillment shop gepushed.',
             ]);
@@ -40,8 +40,8 @@ class ShowEfulfillmentShopOrder extends Component
         $this->order->efulfillmentShopOrder->pushed = 0;
         $this->order->efulfillmentShopOrder->save();
 
-        $this->emit('refreshPage');
-        $this->emit('notify', [
+        $this->dispatch('refreshPage');
+        $this->dispatch('notify', [
             'status' => 'success',
             'message' => 'De bestelling wordt binnen enkele minuten opnieuw naar E-fulfillment shop gepushed.',
         ]);

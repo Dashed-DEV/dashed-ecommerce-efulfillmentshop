@@ -2,26 +2,24 @@
 
 namespace Dashed\DashedEcommerceEfulfillmentshop\Filament\Pages\Settings;
 
-use Dashed\DashedCore\Classes\Sites;
-use Dashed\DashedCore\Models\Customsetting;
-use Dashed\DashedEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
-use Filament\Forms\Components\Placeholder;
+use Filament\Pages\Page;
 use Filament\Forms\Components\Tabs;
+use Dashed\DashedCore\Classes\Sites;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Pages\Page;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\Placeholder;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
 
-class EfulfillmentshopSettingsPage extends Page implements HasForms
+class EfulfillmentshopSettingsPage extends Page
 {
-    use InteractsWithForms;
-
     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $title = 'E-fulfillment shop';
 
     protected static string $view = 'dashed-core::settings.pages.default-settings';
+    public array $data = [];
 
     public function mount(): void
     {
@@ -62,25 +60,17 @@ class EfulfillmentshopSettingsPage extends Page implements HasForms
                     ]),
                 TextInput::make("efulfillment_shop_username_{$site['id']}")
                     ->label('Gebruikersnaam')
-                    ->rules([
-                        'max:255',
-                    ]),
+                    ->maxLength(255),
                 TextInput::make("efulfillment_shop_password_{$site['id']}")
                     ->label('Wachtwoord')
                     ->type('password')
-                    ->rules([
-                        'max:255',
-                    ]),
+                    ->maxLength(255),
                 TextInput::make("efulfillment_shop_channel_id_{$site['id']}")
                     ->label('Channel ID')
-                    ->rules([
-                        'max:255',
-                    ]),
+                    ->maxLength(255),
                 Toggle::make("efulfillment_shop_sandbox_{$site['id']}")
                     ->label('Sandbox mode')
-                    ->rules([
-                        'max:255',
-                    ]),
+                    ->maxLength(255),
             ];
 
             $tabs[] = Tab::make($site['id'])
@@ -97,6 +87,11 @@ class EfulfillmentshopSettingsPage extends Page implements HasForms
         return $tabGroups;
     }
 
+    public function getFormStatePath(): ?string
+    {
+        return 'data';
+    }
+
     public function submit()
     {
         $sites = Sites::getSites();
@@ -109,7 +104,10 @@ class EfulfillmentshopSettingsPage extends Page implements HasForms
             Customsetting::set('efulfillment_shop_connected', EfulfillmentShop::isConnected($site['id']), $site['id']);
         }
 
-        $this->notify('success', 'De Efulfillment shop instellingen zijn opgeslagen');
+        Notification::make()
+            ->title('De Efulfillment shop instellingen zijn opgeslagen')
+            ->success()
+            ->send();
 
         return redirect(EfulfillmentshopSettingsPage::getUrl());
     }
