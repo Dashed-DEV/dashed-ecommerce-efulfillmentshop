@@ -2,9 +2,9 @@
 
 namespace Dashed\DashedEcommerceEfulfillmentshop\Commands;
 
-use Illuminate\Console\Command;
 use Dashed\DashedEcommerceEfulfillmentshop\Classes\EfulfillmentShop;
 use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
+use Illuminate\Console\Command;
 
 class PushOrdersToEfulfillmentShopCommand extends Command
 {
