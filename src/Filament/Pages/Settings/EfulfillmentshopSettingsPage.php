@@ -69,8 +69,7 @@ class EfulfillmentshopSettingsPage extends Page
                     ->label('Channel ID')
                     ->maxLength(255),
                 Toggle::make("efulfillment_shop_sandbox_{$site['id']}")
-                    ->label('Sandbox mode')
-                    ->maxLength(255),
+                    ->label('Sandbox mode'),
             ];
 
             $tabs[] = Tab::make($site['id'])
