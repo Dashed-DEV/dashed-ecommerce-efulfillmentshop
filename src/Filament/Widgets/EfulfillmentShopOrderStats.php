@@ -2,8 +2,8 @@
 
 namespace Dashed\DashedEcommerceEfulfillmentshop\Filament\Widgets;
 
-use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
 use Filament\Widgets\StatsOverviewWidget;
+use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
 
 class EfulfillmentShopOrderStats extends StatsOverviewWidget
 {

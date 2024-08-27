@@ -2,20 +2,20 @@
 
 namespace Dashed\DashedEcommerceEfulfillmentshop;
 
+use Livewire\Livewire;
+use Spatie\LaravelPackageTools\Package;
+use Illuminate\Console\Scheduling\Schedule;
 use Dashed\DashedEcommerceCore\Models\Order;
 use Dashed\DashedEcommerceCore\Models\Product;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
+use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
+use Dashed\DashedEcommerceEfulfillmentshop\Livewire\Orders\ShowEfulfillmentShopOrder;
+use Dashed\DashedEcommerceEfulfillmentshop\Filament\Widgets\EfulfillmentShopOrderStats;
 use Dashed\DashedEcommerceEfulfillmentshop\Commands\PushOrdersToEfulfillmentShopCommand;
 use Dashed\DashedEcommerceEfulfillmentshop\Commands\PushProductsToEfulfillmentShopCommand;
 use Dashed\DashedEcommerceEfulfillmentshop\Commands\UpdateOrdersFromEfulfillmentShopCommand;
 use Dashed\DashedEcommerceEfulfillmentshop\Filament\Pages\Settings\EfulfillmentshopSettingsPage;
-use Dashed\DashedEcommerceEfulfillmentshop\Filament\Widgets\EfulfillmentShopOrderStats;
-use Dashed\DashedEcommerceEfulfillmentshop\Livewire\Orders\ShowEfulfillmentShopOrder;
-use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopOrder;
-use Dashed\DashedEcommerceEfulfillmentshop\Models\EfulfillmentshopProduct;
-use Illuminate\Console\Scheduling\Schedule;
-use Livewire\Livewire;
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class DashedEcommerceEfulfillmentshopServiceProvider extends PackageServiceProvider
 {

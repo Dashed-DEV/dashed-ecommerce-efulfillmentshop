@@ -2,10 +2,10 @@
 
 namespace Dashed\DashedEcommerceEfulfillmentshop;
 
-use Dashed\DashedEcommerceEfulfillmentshop\Filament\Pages\Settings\EfulfillmentshopSettingsPage;
-use Dashed\DashedEcommerceEfulfillmentshop\Filament\Widgets\EfulfillmentShopOrderStats;
-use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Filament\Contracts\Plugin;
+use Dashed\DashedEcommerceEfulfillmentshop\Filament\Widgets\EfulfillmentShopOrderStats;
+use Dashed\DashedEcommerceEfulfillmentshop\Filament\Pages\Settings\EfulfillmentshopSettingsPage;
 
 class DashedEcommerceEfulfillmentshopPlugin implements Plugin
 {
